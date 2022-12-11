@@ -19,9 +19,18 @@ if(isset($_POST['submit'])) {
 
   $phone = ($_POST['phone']);
 
+  $imagename = $_FILES["images_banner"]["name"];
+  $tempname = $_FILES["images_banner"]["tmp_name"];   
+  $folder = "images/".$imagename;
+  $image_move = move_uploaded_file($tempname, $folder);
 
 
- $query = mysqli_query($conn,"insert into form( name,email,phone) values('$name','$email','$phone')");
+  $gender = ($_POST['gender']);
+  $fav_language = ($_POST['fav_language']);
+
+  $dob = date('Y/m/d', strtotime($_POST['dateofbirth']));
+
+ $query = mysqli_query($conn,"insert into form( name,email,phone,images_banner,gender,fav_language,birth) values('$name','$email','$phone','$imagename','$gender','$fav_language','$dob')");
 
 
 
@@ -100,7 +109,12 @@ if(isset($_POST['submit'])) {
 <![endif]-->
 <!--- Custom ---->
 <link href="css/scss/style.css" rel="stylesheet">
-
+<style>
+    .contact-form .formpart form input[type="radio"]{
+        width: auto !important;
+        height: auto !important;
+    }
+</style>
 
 </head>
 <body>
@@ -117,7 +131,7 @@ if(isset($_POST['submit'])) {
                <div class="formpart "> 
                <h5>Submit</h5>
                   
-                <form method="POST">
+               <form method="POST" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input id="name" class="form-control" type="text" name="name" required>
@@ -129,6 +143,35 @@ if(isset($_POST['submit'])) {
                     <div class="form-group">
                         <label for="Phone">Phone no</label>
                         <input id="phone" class="form-control" type="text" name="phone">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select name="gender" class="form-control">
+                            <option vlaue="male">Male</option>
+                            <option vlaue="female">feMale</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                     <p>Please select your favorite Web language:</p>
+                     <input type="radio" id="html" name="fav_language" value="HTML">
+                     <label for="html">HTML</label>
+                     <input type="radio" id="css" name="fav_language" value="CSS">
+                     <label for="css">CSS</label>
+                     <input type="radio" id="javascript" name="fav_language" value="JavaScript">
+                     <label for="javascript">JavaScript</label>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label>image</label> 
+                        <input class="form-control" type="date" name="birth">  
+                    </div>
+
+                    <div class="form-group">
+                        <label>image</label> 
+                        <input class="form-control" type="file" name="images_banner">  
                     </div>
                 
                     <div class="form-group">

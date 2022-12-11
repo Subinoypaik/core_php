@@ -2,7 +2,26 @@
 <?php 
   include "db.php";
 ?>
+<?php 
 
+if(isset($_GET['delid']))
+
+{
+
+    $rid=$_GET['delid'];
+    $deletequrey = "delete from form where id='$rid'";
+
+    $sql=mysqli_query($conn,$deletequrey);
+
+
+    echo "<script>alert('Data deleted');</script>"; 
+
+    echo "<script>window.location.href = 'table.php'</script>";     
+  
+};
+
+
+?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,7 +53,11 @@
 <!--- Custom ---->
 <link href="css/scss/style.css" rel="stylesheet">
 
-
+<style>
+  #datatablesSimple{
+    width:100% !important;
+  }
+</style>
 </head>
 <body>
    
@@ -48,34 +71,54 @@ Category DataTable
 </div>
 <div class="card-body">
     <a href="index.php">ADD MORE</a>
-<table id="datatablesSimple">
+<table id="datatablesSimple " class="w-100">
         <thead>
         <tr>
             <th>#</th>            
 
-            <th>NAME</th>
+            <th calspan="3">NAME</th>
 
-            <th>#EMAIL</th>
+            <th calspan="3">EMAIL</th>
 
-            <th>#PHONE</th>
+            <th calspan="3">PHONE</th>
+            <th calspan="3">Image</th>
+            <th calspan="3">Gender</th>
+            <th calspan="3">Language</th>
+            <th calspan="3">Birhday</th>
+            <th calspan="3">Action</th>
 
         </tr>
         </thead>
         <?php
 
                                     $result=mysqli_query($conn,"select * from form");
+                                    $cnt=0;
+                                   
                                     $row=mysqli_num_rows($result);
-                                    while ($row=mysqli_fetch_array($result)) {
+                                   
+                                      if( $row>0){
 
-                                   ?> 
+                                        while ($row=mysqli_fetch_array($result)) { 
+                                   ?>  <?php  $cnt=$cnt+1;?>
                                             <tr>
-                                                <td><?php  echo $row['name'];?></td>
-                                                <td> <?php  echo $row['email'];?></td>
-                                            <td> <?php  echo $row['phone'];?></td>
-                                </tr>
-
-                <?php 
-                } ?>     
+                                               <td calspan="3"><?php  echo  $cnt;?></td>
+                                                <td calspan="3"><?php  echo $row['name'];?></td>
+                                                <td calspan="3"> <?php  echo $row['email'];?></td>
+                                                 <td calspan="3"> <?php  echo $row['phone'];?></td>
+                                                 <td calspan="3"> <img width="100" src="images/<?php  echo $row['images_banner'];?>"/></td>
+                                                 <td calspan="3">  <?php  echo $row['gender'];?></td>
+                                                 <td> <?php  echo $row['fav_language'];?></td>
+                                                 <td> <?php  echo $row['birth'];?></td>
+                                                 <td>  <a href="table.php?delid=<?php echo ($row['id']);?>" class="delete btn btn-success" title="Delete"  onclick="return confirm('Do you really want to Delete ?');">Delete</a>
+</td>
+                                           
+                                             </tr>
+                                            
+                                   <?php 
+                                    
+                                   }} else{?>
+                                    <tr><td>no record</td></tr>
+                                   <?php } ?>     
 
 </tbody>
 
